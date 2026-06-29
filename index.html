@@ -256,12 +256,13 @@ window.addEventListener('load',()=>{
 async function initApp(email){
   showLoading();
   try{
-    const res=await api('member_list');
-    members=res.members||res.data||[];
+    const [memberRes, eventRes] = await Promise.all([api('member_list'), api('cal_list')]);
+    members=memberRes.members||memberRes.data||[];
+    events=eventRes.events||eventRes.data||[];
     const me=members.find(m=>m.email===email);
     if(me){
       currentUser=me;
-      enterCalendar();
+      enterCalendarFast();
     } else {
       hideLoading();
       showRegistration(email);
@@ -312,7 +313,7 @@ async function submitRegistration(){
 }
 
 // --- Enter Calendar ---
-async function enterCalendar(){
+function enterCalendarFast(){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').classList.add('visible');
   document.getElementById('user-badge').innerHTML=`${currentUser.mascot} ${currentUser.name}`;
@@ -320,8 +321,12 @@ async function enterCalendar(){
   const now=new Date();
   baseYear=now.getFullYear();
   baseMonth=now.getMonth();
-  await loadEvents();
+  renderCalendars();
   hideLoading();
+}
+async function enterCalendar(){
+  await loadEvents();
+  enterCalendarFast();
 }
 
 async function loadEvents(){
