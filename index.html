@@ -416,9 +416,7 @@ function renderMonth(year,month){
   const firstDay=new Date(year,month,1).getDay();
   const daysInMonth=new Date(year,month+1,0).getDate();
   const prevDays=new Date(year,month,0).getDate();
-  let neededRows=Math.ceil((firstDay+daysInMonth)/7);
-  if(firstDay+daysInMonth<=neededRows*7-7) neededRows--;
-  const totalCells=neededRows*7;
+  const totalCells=42;
   const weeks=totalCells/7;
 
   // Build array of date strings for the grid
@@ -488,10 +486,12 @@ function renderMonth(year,month){
   html+=`<div class="cal-grid">`;
 
   for(let w=0;w<weeks;w++){
+    const weekAllOther=cells.slice(w*7,w*7+7).every(c=>c.isOther);
     const lanes=weekLanes[w];
     for(let col=0;col<7;col++){
       const ci=w*7+col;
       const cell=cells[ci];
+      if(weekAllOther){html+=`<div class="cal-cell other-month" style="opacity:0"></div>`;continue;}
       const isToday=cell.date===todayStr;
       const classes=['cal-cell'];
       if(cell.isOther) classes.push('other-month');
