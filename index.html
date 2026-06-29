@@ -269,8 +269,18 @@ async function initApp(email){
     events=eventRes.events||eventRes.data||[];
     const me=members.find(m=>m.email===email);
     if(me){
+      if(me.status==='pending'){
+        hideLoading();
+        document.getElementById('login-screen').style.display='flex';
+        document.getElementById('login-error').textContent='관리자 승인 대기 중입니다.';
+        document.getElementById('login-error').style.color='#f59e0b';
+        return;
+      }
       currentUser=me;
       enterCalendarFast();
+    } else if(email===ADMIN_EMAIL){
+      hideLoading();
+      showRegistration(email);
     } else {
       hideLoading();
       showRegistration(email);
@@ -309,8 +319,17 @@ async function submitRegistration(){
   const m=getMascot(_selectedRegMascot);
   showLoading();
   try{
-    await apiPost('member_save',{email:window._regEmail,name:enc(name),mascot:_selectedRegMascot,color:m.color});
-    currentUser={email:window._regEmail,name,mascot:_selectedRegMascot,color:m.color};
+    const status=window._regEmail===ADMIN_EMAIL?'approved':'pending';
+    await apiPost('member_save',{email:window._regEmail,name:enc(name),mascot:_selectedRegMascot,color:m.color,status:status});
+    if(status==='pending'){
+      document.getElementById('reg-overlay').classList.remove('open');
+      document.getElementById('login-screen').style.display='flex';
+      document.getElementById('login-error').textContent='가입 요청 완료! 관리자 승인 후 이용 가능합니다.';
+      document.getElementById('login-error').style.color='#f59e0b';
+      hideLoading();
+      return;
+    }
+    currentUser={email:window._regEmail,name,mascot:_selectedRegMascot,color:m.color,status:'approved'};
     members.push(currentUser);
     document.getElementById('reg-overlay').classList.remove('open');
     enterCalendar();
@@ -663,24 +682,53 @@ function openAdmin(){
   if(!isAdmin())return;
   const panel=document.getElementById('admin-panel');
   let html='<h2>멤버 관리</h2>';
-  if(members.length===0){
-    html+='<div style="text-align:center;padding:20px;color:#94a3b8">멤버가 없습니다</div>';
-  } else {
-    for(const m of members){
+  const pending=members.filter(m=>m.status==='pending');
+  const approved=members.filter(m=>m.status!=='pending');
+  if(pending.length){
+    html+='<div style="font-size:12px;font-weight:700;color:#f59e0b;margin-bottom:8px">승인 대기 ('+pending.length+')</div>';
+    for(const m of pending){
+      html+=`<div class="admin-member" style="border-color:#fbbf24;background:#fffbeb">
+        <span class="mascot-icon">${m.mascot||'⏳'}</span>
+        <div class="member-info"><div class="member-name">${esc(m.name)}</div><div class="member-email">${esc(m.email)}</div></div>
+        <button class="btn-remove" style="background:#ecfdf5;color:#059669" onclick="adminApproveMember('${m.email}')">승인</button>
+        <button class="btn-remove" onclick="adminDeleteMember('${m.email}')">거부</button>
+      </div>`;
+    }
+  }
+  if(approved.length){
+    html+='<div style="font-size:12px;font-weight:700;color:#64748b;margin:12px 0 8px">승인된 멤버 ('+approved.length+')</div>';
+    for(const m of approved){
       const mascotOpts=MASCOTS.map(ms=>`<option value="${ms.emoji}"${ms.emoji===m.mascot?' selected':''}>${ms.emoji} ${ms.name}</option>`).join('');
       html+=`<div class="admin-member">
         <span class="mascot-icon">${m.mascot}</span>
-        <div class="member-info"><div class="member-name">${m.name}</div><div class="member-email">${m.email}</div></div>
+        <div class="member-info"><div class="member-name">${esc(m.name)}</div><div class="member-email">${esc(m.email)}</div></div>
         <select onchange="adminChangeMascot('${m.email}',this.value)">${mascotOpts}</select>
         <button class="btn-remove" onclick="adminDeleteMember('${m.email}')">삭제</button>
       </div>`;
     }
+  }
+  if(!members.length){
+    html+='<div style="text-align:center;padding:20px;color:#94a3b8">멤버가 없습니다</div>';
   }
   html+='<div class="btns" style="margin-top:16px"><button class="btn-cancel" onclick="closeAdmin()">닫기</button></div>';
   panel.innerHTML=html;
   document.getElementById('admin-overlay').classList.add('open');
 }
 function closeAdmin(){document.getElementById('admin-overlay').classList.remove('open')}
+
+async function adminApproveMember(email){
+  const m=members.find(x=>x.email===email);
+  if(!m)return;
+  showLoading();
+  try{
+    await apiPost('member_save',{email,name:enc(m.name),mascot:m.mascot,color:m.color,status:'approved'});
+    m.status='approved';
+    renderMemberLegend();
+    renderCalendars();
+    openAdmin();
+    hideLoading();
+  }catch(e){alert('승인 실패: '+e.message);hideLoading()}
+}
 
 async function adminChangeMascot(email,newMascot){
   const m=members.find(x=>x.email===email);
