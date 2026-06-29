@@ -51,7 +51,8 @@ body{background:#f8fafc;min-height:100vh;font-family:-apple-system,'Pretendard',
 .cal-cell.today .cal-day span:first-child{background:#3b82f6;padding:1px 6px;border-radius:10px;display:inline-block}
 .cal-cell.other-month{background:#f9fafb}
 .cal-cell.other-month .cal-day{color:#d1d5db;font-weight:400}
-.cal-cell.other-month .ev-bar{opacity:.15}
+.cal-cell.other-month .ev-bar{display:none}
+.cal-cell.other-month .ev-placeholder{display:none}
 .cal-cell.other-month .hol-name{opacity:.3}
 .cal-cell.other-month.holiday{background:#fefefe}
 .cal-day{font-size:11px;font-weight:700;padding:1px 3px;color:#334155;flex-shrink:0;display:flex;align-items:center;gap:2px}
@@ -370,7 +371,7 @@ function goToday(){
 // --- Korean Holidays ---
 const HOLIDAYS={
   '01-01':'신정','03-01':'삼일절','05-05':'어린이날','06-06':'현충일',
-  '08-15':'광복절','10-03':'개천절','10-09':'한글날','12-25':'성탄절'
+  '07-17':'제헌절','08-15':'광복절','10-03':'개천절','10-09':'한글날','12-25':'성탄절'
 };
 const LUNAR_HOLIDAYS={
   '2025':{'01-28':'설날','01-29':'설날','01-30':'설날','04-05':'석가탄신일','10-05':'추석','10-06':'추석','10-07':'추석'},
