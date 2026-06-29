@@ -55,13 +55,13 @@ body{background:#f8fafc;min-height:100vh;font-family:-apple-system,'Pretendard',
 .cal-events{flex:1;display:flex;flex-direction:column;gap:1px;min-height:0;overflow:hidden}
 
 /* Event bars */
-.ev-bar{font-size:8px;padding:1px 4px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;line-height:1.5;height:14px;flex-shrink:0}
+.ev-bar{font-size:10px;padding:2px 5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;line-height:1.4;height:18px;flex-shrink:0}
 .ev-bar.start{border-radius:3px 0 0 3px}
 .ev-bar.end{border-radius:0 3px 3px 0}
 .ev-bar.single{border-radius:3px}
 .ev-bar.mid{border-radius:0}
 .ev-bar.start.end{border-radius:3px}
-.ev-placeholder{height:14px;flex-shrink:0}
+.ev-placeholder{height:18px;flex-shrink:0}
 
 /* Modals */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:50;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
@@ -508,8 +508,9 @@ function renderMonth(year,month){
             if(isEnd) cls+=' end';
             if(!isStart&&!isEnd) cls+=' mid';
           }
-          const label=isStart?`${mascotE} ${ev.title||''}`:'';
-          html+=`<div class="${cls}" style="background:${color}" title="${ev.title||''}">${label}</div>`;
+          const memName=mem?mem.name:'';
+          const label=isStart||isSingle?`${mascotE} ${memName} ${ev.title||''}`:'';
+          html+=`<div class="${cls}" style="background:${color}" title="${memName}: ${ev.title||''}">${label}</div>`;
         } else {
           html+=`<div class="ev-placeholder"></div>`;
         }
