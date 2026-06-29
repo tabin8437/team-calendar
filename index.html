@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <title>해외서비스팀 캘린더</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%234f46e5'/><rect x='8' y='18' width='48' height='38' rx='6' fill='white'/><rect x='8' y='18' width='48' height='16' rx='6' fill='%236366f1'/><rect x='8' y='26' width='48' height='8' fill='%236366f1'/><circle cx='22' cy='14' r='4' fill='white'/><circle cx='42' cy='14' r='4' fill='white'/><rect x='16' y='42' width='8' height='8' rx='2' fill='%23e0e7ff'/><rect x='28' y='42' width='8' height='8' rx='2' fill='%234f46e5'/><rect x='40' y='42' width='8' height='8' rx='2' fill='%23e0e7ff'/></svg>">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -343,12 +344,6 @@ async function submitRegistration(){
 }
 
 // --- Enter Calendar ---
-function enterCalendarFast(){
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('app').classList.add('visible');
-  renderMemberLegend();
-  if(isAdmin()) document.getElementById('btn-admin').style.display='flex';
-
 function renderMemberLegend(){
   const el=document.getElementById('member-legend');
   el.innerHTML=members.map(m=>{
@@ -356,11 +351,18 @@ function renderMemberLegend(){
     return `<span class="member-chip${isMe?' me':''}" style="background:${m.color}">${m.mascot} ${m.name}</span>`;
   }).join('');
 }
+
+function enterCalendarFast(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').classList.add('visible');
+  renderMemberLegend();
+  if(isAdmin()) document.getElementById('btn-admin').style.display='flex';
   const now=new Date();
   baseYear=now.getFullYear();
   baseMonth=now.getMonth();
   renderCalendars();
   hideLoading();
+  startAutoRefresh();
 }
 async function enterCalendar(){
   await loadEvents();
@@ -375,6 +377,23 @@ async function loadEvents(){
   }catch(e){events=[];}
   renderCalendars();
   hideLoading();
+}
+
+async function silentRefresh(){
+  try{
+    const res=await api('cal_list');
+    events=res.events||res.data||[];
+    renderCalendars();
+  }catch(e){}
+}
+
+let _refreshTimer=null;
+function startAutoRefresh(){
+  if(_refreshTimer) clearInterval(_refreshTimer);
+  _refreshTimer=setInterval(silentRefresh,30000);
+}
+function stopAutoRefresh(){
+  if(_refreshTimer){clearInterval(_refreshTimer);_refreshTimer=null;}
 }
 
 function navMonth(d){
