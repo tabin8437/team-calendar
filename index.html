@@ -23,7 +23,10 @@ body{background:#f8fafc;min-height:100vh;font-family:-apple-system,'Pretendard',
 .topbar{background:#fff;border-bottom:1px solid #e2e8f0;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.03)}
 .topbar-left{display:flex;align-items:center;gap:10px}
 .topbar h1{font-size:15px;font-weight:700;color:#1e293b}
-.topbar .user-badge{font-size:12px;color:#64748b;background:#f1f5f9;padding:3px 10px;border-radius:20px;display:flex;align-items:center;gap:4px}
+.topbar .user-badge{font-size:11px;color:#64748b;background:#f1f5f9;padding:3px 10px;border-radius:20px;display:flex;align-items:center;gap:4px}
+.member-legend{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.member-chip{font-size:11px;padding:2px 8px;border-radius:12px;color:#fff;font-weight:600;display:flex;align-items:center;gap:3px}
+.member-chip.me{box-shadow:0 0 0 2px #1e293b}
 .topbar-right{display:flex;align-items:center;gap:6px}
 .nav-btn{background:none;border:1px solid #e2e8f0;border-radius:8px;width:32px;height:32px;font-size:14px;cursor:pointer;color:#64748b;display:flex;align-items:center;justify-content:center}
 .nav-btn:hover{background:#f8fafc}
@@ -48,6 +51,9 @@ body{background:#f8fafc;min-height:100vh;font-family:-apple-system,'Pretendard',
 .cal-cell.today .cal-day span:first-child{background:#3b82f6;padding:1px 6px;border-radius:10px;display:inline-block}
 .cal-cell.other-month{background:#f9fafb}
 .cal-cell.other-month .cal-day{color:#d1d5db;font-weight:400}
+.cal-cell.other-month .ev-bar{opacity:.15}
+.cal-cell.other-month .hol-name{opacity:.3}
+.cal-cell.other-month.holiday{background:#fefefe}
 .cal-day{font-size:11px;font-weight:700;padding:1px 3px;color:#334155;flex-shrink:0;display:flex;align-items:center;gap:2px}
 .cal-cell.sun .cal-day{color:#ef4444}
 .cal-cell.sat .cal-day{color:#3b82f6}
@@ -157,7 +163,7 @@ body{background:#f8fafc;min-height:100vh;font-family:-apple-system,'Pretendard',
   <div class="topbar">
     <div class="topbar-left">
       <h1>해외서비스팀 캘린더</h1>
-      <div class="user-badge" id="user-badge"></div>
+      <div class="member-legend" id="member-legend"></div>
     </div>
     <div class="topbar-right">
       <button class="nav-btn" onclick="navMonth(-1)">◀</button>
@@ -317,8 +323,16 @@ async function submitRegistration(){
 function enterCalendarFast(){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').classList.add('visible');
-  document.getElementById('user-badge').innerHTML=`${currentUser.mascot} ${currentUser.name}`;
+  renderMemberLegend();
   if(isAdmin()) document.getElementById('btn-admin').style.display='flex';
+
+function renderMemberLegend(){
+  const el=document.getElementById('member-legend');
+  el.innerHTML=members.map(m=>{
+    const isMe=currentUser&&m.email===currentUser.email;
+    return `<span class="member-chip${isMe?' me':''}" style="background:${m.color}">${m.mascot} ${m.name}</span>`;
+  }).join('');
+}
   const now=new Date();
   baseYear=now.getFullYear();
   baseMonth=now.getMonth();
@@ -674,7 +688,8 @@ async function adminChangeMascot(email,newMascot){
     await apiPost('member_save',{email,name:enc(m.name),mascot:newMascot,color:ms.color});
     m.mascot=newMascot;
     m.color=ms.color;
-    if(currentUser.email===email){currentUser.mascot=newMascot;currentUser.color=ms.color;document.getElementById('user-badge').innerHTML=`${currentUser.mascot} ${currentUser.name}`}
+    if(currentUser.email===email){currentUser.mascot=newMascot;currentUser.color=ms.color;}
+    renderMemberLegend();
     renderCalendars();
     openAdmin();
     hideLoading();
