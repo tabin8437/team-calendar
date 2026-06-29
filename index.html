@@ -61,6 +61,9 @@ body{background:#f8fafc;min-height:100vh;font-family:-apple-system,'Pretendard',
 .cal-cell.holiday{background:#fff5f5}
 .cal-cell.holiday .cal-day{color:#ef4444}
 .hol-name{font-size:8px;color:#ef4444;font-weight:600;margin-left:2px}
+.cal-cell.nolgeum{background:#f0fdf4}
+.cal-cell.nolgeum .cal-day{color:#16a34a}
+.nol-name{font-size:8px;color:#16a34a;font-weight:600;margin-left:2px}
 .cal-day .mascot-dots{display:none}
 .cal-events{flex:1;display:flex;flex-direction:column;gap:1px;min-height:0;overflow:hidden}
 
@@ -387,22 +390,44 @@ function goToday(){
   renderCalendars();
 }
 
-// --- Korean Holidays ---
+// --- Korean Holidays (공휴일 + 대체공휴일) ---
 const HOLIDAYS={
   '01-01':'신정','03-01':'삼일절','05-05':'어린이날','06-06':'현충일',
   '07-17':'제헌절','08-15':'광복절','10-03':'개천절','10-09':'한글날','12-25':'성탄절'
 };
-const LUNAR_HOLIDAYS={
-  '2025':{'01-28':'설날','01-29':'설날','01-30':'설날','04-05':'석가탄신일','10-05':'추석','10-06':'추석','10-07':'추석'},
-  '2026':{'02-16':'설날','02-17':'설날','02-18':'설날','05-24':'석가탄신일','09-24':'추석','09-25':'추석','09-26':'추석'},
-  '2027':{'02-06':'설날','02-07':'설날','02-08':'설날','05-13':'석가탄신일','10-13':'추석','10-14':'추석','10-15':'추석'}
+const YEARLY_HOLIDAYS={
+  '2025':{
+    '01-27':'설날','01-28':'설날','01-29':'설날','01-30':'대체공휴일',
+    '03-03':'대체공휴일','05-05':'어린이날','05-06':'대체공휴일(석가탄신일)','05-06':'대체공휴일',
+    '10-05':'추석','10-06':'추석','10-07':'추석','10-08':'대체공휴일'
+  },
+  '2026':{
+    '02-16':'설날','02-17':'설날','02-18':'설날','02-19':'대체공휴일',
+    '03-02':'대체공휴일','05-24':'석가탄신일','05-25':'대체공휴일',
+    '09-24':'추석','09-25':'추석','09-26':'추석',
+    '10-05':'대체공휴일(개천절)'
+  },
+  '2027':{
+    '02-06':'설날','02-07':'설날','02-08':'설날','02-09':'대체공휴일',
+    '05-13':'석가탄신일','05-14':'대체공휴일',
+    '08-16':'대체공휴일','10-11':'대체공휴일',
+    '10-13':'추석','10-14':'추석','10-15':'추석'
+  }
 };
 function isHoliday(ds){
-  var md=ds.slice(5);
+  var md=ds.slice(5), y=ds.slice(0,4);
   if(HOLIDAYS[md])return HOLIDAYS[md];
-  var y=ds.slice(0,4);
-  if(LUNAR_HOLIDAYS[y]&&LUNAR_HOLIDAYS[y][md])return LUNAR_HOLIDAYS[y][md];
+  if(YEARLY_HOLIDAYS[y]&&YEARLY_HOLIDAYS[y][md])return YEARLY_HOLIDAYS[y][md];
   return null;
+}
+
+// --- 놀금 (격주 금요일, 2026-07-03 시작) ---
+const NOLGEUM_START=new Date(2026,6,3);
+function isNolgeum(ds){
+  var d=new Date(ds+'T00:00:00');
+  if(d.getDay()!==5)return false;
+  var diff=Math.round((d-NOLGEUM_START)/(7*86400000));
+  return diff>=0&&diff%2===0;
 }
 
 // --- Calendar Rendering ---
@@ -516,9 +541,11 @@ function renderMonth(year,month){
       if(cell.isOther) classes.push('other-month');
       if(isToday&&!cell.isOther) classes.push('today');
       const hol=isHoliday(cell.date);
+      const nolgeum=!cell.isOther&&isNolgeum(cell.date);
       if(col===0||hol) classes.push('sun');
       if(col===6) classes.push('sat');
       if(hol) classes.push('holiday');
+      if(nolgeum) classes.push('nolgeum');
 
       // Mascot dots: all events active on this day
       const dayEvents=relevantEvents.filter(ev=>{
@@ -533,7 +560,8 @@ function renderMonth(year,month){
 
       html+=`<div class="${classes.join(' ')}" onclick="openDay('${cell.date}')" data-date="${cell.date}">`;
       const holName=hol?`<span class="hol-name">${hol}</span>`:'';
-      html+=`<div class="cal-day"><span>${cell.day}</span>${holName}${mascotsHtml}</div>`;
+      const nolName=nolgeum?`<span class="nol-name">놀금</span>`:'';
+      html+=`<div class="cal-day"><span>${cell.day}</span>${holName}${nolName}${mascotsHtml}</div>`;
       html+=`<div class="cal-events">`;
 
       // Render lane bars for this column
@@ -701,7 +729,7 @@ function openAdmin(){
       const mascotOpts=MASCOTS.map(ms=>`<option value="${ms.emoji}"${ms.emoji===m.mascot?' selected':''}>${ms.emoji} ${ms.name}</option>`).join('');
       html+=`<div class="admin-member">
         <span class="mascot-icon">${m.mascot}</span>
-        <div class="member-info"><div class="member-name">${esc(m.name)}</div><div class="member-email">${esc(m.email)}</div></div>
+        <div class="member-info"><div class="member-name">${esc(m.name)} <button style="background:none;border:none;cursor:pointer;font-size:11px;color:#94a3b8" onclick="adminRename('${m.email}','${esc(m.name)}')">✏️</button></div><div class="member-email">${esc(m.email)}</div></div>
         <select onchange="adminChangeMascot('${m.email}',this.value)">${mascotOpts}</select>
         <button class="btn-remove" onclick="adminDeleteMember('${m.email}')">삭제</button>
       </div>`;
@@ -728,6 +756,23 @@ async function adminApproveMember(email){
     openAdmin();
     hideLoading();
   }catch(e){alert('승인 실패: '+e.message);hideLoading()}
+}
+
+async function adminRename(email,oldName){
+  const newName=prompt('이름 수정:',oldName);
+  if(!newName||newName===oldName)return;
+  const m=members.find(x=>x.email===email);
+  if(!m)return;
+  showLoading();
+  try{
+    await apiPost('member_save',{email,name:enc(newName),mascot:m.mascot,color:m.color,status:m.status||'approved'});
+    m.name=newName;
+    if(currentUser.email===email)currentUser.name=newName;
+    renderMemberLegend();
+    renderCalendars();
+    openAdmin();
+    hideLoading();
+  }catch(e){alert('수정 실패: '+e.message);hideLoading()}
 }
 
 async function adminChangeMascot(email,newMascot){
