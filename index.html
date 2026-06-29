@@ -254,7 +254,7 @@ async function initApp(email){
   showLoading();
   try{
     const res=await api('member_list');
-    members=res.data||[];
+    members=res.members||res.data||[];
     const me=members.find(m=>m.email===email);
     if(me){
       currentUser=me;
@@ -325,7 +325,7 @@ async function loadEvents(){
   showLoading();
   try{
     const res=await api('cal_list');
-    events=res.data||[];
+    events=res.events||res.data||[];
   }catch(e){events=[];}
   renderCalendars();
   hideLoading();
