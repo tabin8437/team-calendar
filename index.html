@@ -610,24 +610,25 @@ async function saveEvent(){
     color:currentUser.color,
     author:currentUser.email
   };
-  if(_editingEvent) params.id=_editingEvent.id;
-  showLoading();
-  try{
-    await apiPost('cal_save',params);
-    closeEvent();
-    await loadEvents();
-  }catch(e){alert('저장 실패: '+e.message);hideLoading()}
+  const id=_editingEvent?_editingEvent.id:('ev_'+Date.now()+'_'+Math.random().toString(36).slice(2,6));
+  params.id=id;
+  // optimistic update
+  const localEv={id,date,endDate:endDate||date,time:time||'',title,memo,color:currentUser.color,author:currentUser.email};
+  if(_editingEvent){events=events.filter(e=>e.id!==id);}
+  events.push(localEv);
+  closeEvent();
+  renderCalendars();
+  apiPost('cal_save',params).catch(function(e){alert('저장 실패: '+e.message);loadEvents();})
 }
 
 async function deleteEvent(){
   if(!_editingEvent)return;
   if(!confirm('이 일정을 삭제하시겠습니까?'))return;
-  showLoading();
-  try{
-    await apiPost('cal_delete',{id:_editingEvent.id});
-    closeEvent();
-    await loadEvents();
-  }catch(e){alert('삭제 실패: '+e.message);hideLoading()}
+  const delId=_editingEvent.id;
+  events=events.filter(e=>e.id!==delId);
+  closeEvent();
+  renderCalendars();
+  apiPost('cal_delete',{id:delId}).catch(function(e){alert('삭제 실패');loadEvents();})
 }
 
 // --- Admin ---
