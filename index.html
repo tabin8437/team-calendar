@@ -277,8 +277,8 @@ function showRegistration(email){
   const grid=document.getElementById('reg-mascot-grid');
   const takenMascots=members.map(m=>m.mascot);
   grid.innerHTML=MASCOTS.map(m=>{
-    const taken=takenMascots.includes(m.emoji);
-    return `<button class="reg-mascot-btn${taken?' disabled':''}" data-emoji="${m.emoji}" data-color="${m.color}" ${taken?'disabled':''} onclick="selectRegMascot(this)" style="border-color:${taken?'#e2e8f0':m.color}30">${m.emoji}</button>`;
+    const taken=takenMascots.includes(m.id)||takenMascots.includes(m.emoji);
+    return `<button class="reg-mascot-btn${taken?' taken':''}" data-emoji="${m.emoji}" data-color="${m.color}" ${taken?'disabled':''} onclick="selectRegMascot(this)" style="${taken?'opacity:.25;cursor:not-allowed;border-color:#e2e8f0':'border-color:'+m.color+'30'}">${m.emoji}${taken?'<span style="font-size:10px;display:block">선점됨</span>':''}</button>`;
   }).join('');
   window._regEmail=email;
 }
