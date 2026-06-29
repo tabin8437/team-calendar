@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>팀 캘린더</title>
+<title>해외서비스팀 캘린더</title>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -22,7 +22,7 @@ body{background:#f8fafc;min-height:100vh;font-family:-apple-system,'Pretendard',
 /* Topbar */
 .topbar{background:#fff;border-bottom:1px solid #e2e8f0;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;flex-shrink:0}
 .topbar-left{display:flex;align-items:center;gap:10px}
-.topbar h1{font-size:16px;font-weight:700;color:#1e293b}
+.topbar h1{font-size:15px;font-weight:700;color:#1e293b}
 .topbar .user-badge{font-size:12px;color:#64748b;background:#f1f5f9;padding:3px 10px;border-radius:20px;display:flex;align-items:center;gap:4px}
 .topbar-right{display:flex;align-items:center;gap:6px}
 .nav-btn{background:none;border:1px solid #e2e8f0;border-radius:8px;width:32px;height:32px;font-size:14px;cursor:pointer;color:#64748b;display:flex;align-items:center;justify-content:center}
@@ -34,7 +34,7 @@ body{background:#f8fafc;min-height:100vh;font-family:-apple-system,'Pretendard',
 .btn-admin:hover{background:#f8fafc}
 
 /* Calendar container */
-.cal-container{display:flex;gap:16px;padding:8px 12px 12px;flex:1;overflow:hidden}
+.cal-container{display:flex;gap:20px;padding:12px 16px 16px;flex:1;overflow:hidden}
 .cal-month{flex:1;min-width:340px;display:flex;flex-direction:column;overflow:hidden;background:#fff;border-radius:10px;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:4px}
 .cal-month-title{text-align:center;font-size:14px;font-weight:700;color:#1e293b;padding:10px 0;flex-shrink:0;border-bottom:1px solid #e2e8f0;background:#f8fafc;border-radius:10px 10px 0 0}
 .cal-header{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:10px;font-weight:700;color:#94a3b8;padding:4px 0;flex-shrink:0}
@@ -50,8 +50,8 @@ body{background:#f8fafc;min-height:100vh;font-family:-apple-system,'Pretendard',
 .cal-cell.sat .cal-day{color:#3b82f6}
 .cal-cell.holiday{background:#fff5f5}
 .cal-cell.holiday .cal-day{color:#ef4444}
-.hol-name{font-size:7px;color:#ef4444;font-weight:600;margin-left:1px}
-.cal-day .mascot-dots{font-size:9px;line-height:1}
+.hol-name{font-size:8px;color:#ef4444;font-weight:600;margin-left:2px}
+.cal-day .mascot-dots{display:none}
 .cal-events{flex:1;display:flex;flex-direction:column;gap:1px;min-height:0;overflow:hidden}
 
 /* Event bars */
@@ -137,7 +137,7 @@ body{background:#f8fafc;min-height:100vh;font-family:-apple-system,'Pretendard',
 <body>
 
 <div class="login-screen" id="login-screen">
-  <h1>팀 캘린더</h1>
+  <h1>해외서비스팀 캘린더</h1>
   <p>Google 계정으로 로그인하세요</p>
   <div id="g_id_onload"
     data-client_id="272234568921-8m6a55tgvo7e86nsk2u7tjbarqff34en.apps.googleusercontent.com"
@@ -152,7 +152,7 @@ body{background:#f8fafc;min-height:100vh;font-family:-apple-system,'Pretendard',
 <div id="app">
   <div class="topbar">
     <div class="topbar-left">
-      <h1>팀 캘린더</h1>
+      <h1>해외서비스팀 캘린더</h1>
       <div class="user-badge" id="user-badge"></div>
     </div>
     <div class="topbar-right">
@@ -169,7 +169,7 @@ body{background:#f8fafc;min-height:100vh;font-family:-apple-system,'Pretendard',
 <div class="modal-overlay" id="reg-overlay">
   <div class="modal">
     <h2>첫 방문 등록</h2>
-    <p style="font-size:13px;color:#64748b;margin-bottom:8px">팀 캘린더에 오신 것을 환영합니다! 이름과 마스코트를 선택해주세요.</p>
+    <p style="font-size:13px;color:#64748b;margin-bottom:8px">해외서비스팀 캘린더에 오신 것을 환영합니다! 이름과 마스코트를 선택해주세요.</p>
     <label>이름 (닉네임)</label>
     <input type="text" id="reg-name" placeholder="예: 홍길동" maxlength="20">
     <label>마스코트 선택</label>
