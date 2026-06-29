@@ -416,7 +416,8 @@ function renderMonth(year,month){
   const firstDay=new Date(year,month,1).getDay();
   const daysInMonth=new Date(year,month+1,0).getDate();
   const prevDays=new Date(year,month,0).getDate();
-  const neededRows=Math.ceil((firstDay+daysInMonth)/7);
+  let neededRows=Math.ceil((firstDay+daysInMonth)/7);
+  if(firstDay+daysInMonth<=neededRows*7-7) neededRows--;
   const totalCells=neededRows*7;
   const weeks=totalCells/7;
 
