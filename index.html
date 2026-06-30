@@ -3,156 +3,157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>해외서비스팀 캘린더</title>
+<title>해외사업팀 캘린더</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%234f46e5'/><rect x='8' y='18' width='48' height='38' rx='6' fill='white'/><rect x='8' y='18' width='48' height='16' rx='6' fill='%236366f1'/><rect x='8' y='26' width='48' height='8' fill='%236366f1'/><circle cx='22' cy='14' r='4' fill='white'/><circle cx='42' cy='14' r='4' fill='white'/><rect x='16' y='42' width='8' height='8' rx='2' fill='%23e0e7ff'/><rect x='28' y='42' width='8' height='8' rx='2' fill='%234f46e5'/><rect x='40' y='42' width='8' height='8' rx='2' fill='%23e0e7ff'/></svg>">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#f8fafc;min-height:100vh;font-family:-apple-system,'Pretendard','Segoe UI',sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:#f0f2f7;min-height:100vh;font-family:-apple-system,'Pretendard','Segoe UI',sans-serif;-webkit-tap-highlight-color:transparent}
 
 /* Login */
-.login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:#fff}
-.login-screen h1{font-size:24px;margin-bottom:4px;color:#1e293b}
-.login-screen p{font-size:13px;color:#94a3b8;margin-bottom:24px}
-.login-error{font-size:12px;color:#ef4444;margin-top:12px;min-height:18px}
+.login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)}
+.login-screen h1{font-size:26px;font-weight:800;margin-bottom:6px;color:#fff;letter-spacing:-.5px}
+.login-screen p{font-size:13px;color:rgba(255,255,255,.75);margin-bottom:28px}
+.login-error{font-size:12px;color:#fca5a5;margin-top:12px;min-height:18px}
 
 /* App */
 #app{display:none;height:100vh;flex-direction:column;overflow:hidden}
 #app.visible{display:flex}
 
 /* Topbar */
-.topbar{background:#fff;border-bottom:1px solid #e2e8f0;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.03)}
-.topbar-left{display:flex;align-items:center;gap:10px}
-.topbar h1{font-size:15px;font-weight:700;color:#1e293b}
+.topbar{background:#fff;border-bottom:1px solid #e5e7eb;padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.topbar h1{font-size:16px;font-weight:800;color:#111827;letter-spacing:-.4px;white-space:nowrap}
 .topbar .user-badge{font-size:11px;color:#64748b;background:#f1f5f9;padding:3px 10px;border-radius:20px;display:flex;align-items:center;gap:4px}
-.member-legend{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.member-chip{font-size:11px;padding:2px 8px;border-radius:12px;color:#fff;font-weight:600;display:flex;align-items:center;gap:3px}
-.member-chip.me{box-shadow:0 0 0 2px #1e293b}
+.member-legend{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.member-chip{font-size:11px;padding:3px 10px;border-radius:20px;color:#fff;font-weight:700;display:flex;align-items:center;gap:3px;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.member-chip.me{outline:2px solid #111827;outline-offset:1px}
 .topbar-right{display:flex;align-items:center;gap:6px}
-.nav-btn{background:none;border:1px solid #e2e8f0;border-radius:8px;width:32px;height:32px;font-size:14px;cursor:pointer;color:#64748b;display:flex;align-items:center;justify-content:center}
-.nav-btn:hover{background:#f8fafc}
-.nav-btn:active{background:#f1f5f9}
-.btn-today{background:#6366f1;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer}
-.btn-today:hover{background:#4f46e5}
-.btn-admin{background:none;border:1px solid #e2e8f0;border-radius:8px;width:32px;height:32px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.btn-admin:hover{background:#f8fafc}
+.nav-btn{background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;width:32px;height:32px;font-size:13px;cursor:pointer;color:#6b7280;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.nav-btn:hover{background:#f3f4f6;border-color:#d1d5db}
+.btn-today{background:#4f46e5;color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.2px;transition:background .12s}
+.btn-today:hover{background:#4338ca}
+.btn-admin{background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;width:32px;height:32px;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.btn-admin:hover{background:#f3f4f6}
 
 /* Calendar container */
-.cal-container{display:flex;gap:20px;padding:12px 16px 16px;flex:1;overflow:hidden}
-.cal-month{flex:1;min-width:340px;display:flex;flex-direction:column;overflow:hidden;background:#fff;border-radius:10px;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:4px}
-.cal-month-title{text-align:center;font-size:14px;font-weight:700;color:#1e293b;padding:10px 0;flex-shrink:0;border-bottom:1px solid #e2e8f0;background:#f8fafc;border-radius:10px 10px 0 0}
-.cal-header{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:10px;font-weight:700;color:#94a3b8;padding:6px 0;flex-shrink:0;background:#fff;border-bottom:1px solid #f1f5f9}
-.cal-header .sun{color:#ef4444}
-.cal-header .sat{color:#3b82f6}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);grid-auto-rows:1fr;gap:1px;flex:1;background:#e2e8f0}
-.cal-cell{background:#fff;padding:2px;cursor:pointer;position:relative;overflow:hidden;min-height:0;display:flex;flex-direction:column}
-.cal-cell:hover{background:#fafbfc}
-.cal-cell.today{background:#dbeafe;border:2px solid #3b82f6;border-radius:4px}
-.cal-cell.today .cal-day{color:#fff;font-weight:900}
-.cal-cell.today .cal-day span:first-child{background:#3b82f6;padding:1px 6px;border-radius:10px;display:inline-block}
-.cal-cell.other-month{background:#f9fafb}
-.cal-cell.other-month .cal-day{color:#d1d5db;font-weight:400}
+.cal-container{display:flex;gap:14px;padding:14px 18px 14px;flex:1;overflow:hidden}
+.cal-month{flex:1;min-width:340px;display:flex;flex-direction:column;overflow:hidden;background:#fff;border-radius:14px;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.cal-month-title{text-align:center;font-size:15px;font-weight:800;color:#111827;padding:12px 0 10px;flex-shrink:0;border-bottom:1px solid #f3f4f6;letter-spacing:-.3px}
+.cal-header{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:10px;font-weight:700;color:#9ca3af;padding:7px 0;flex-shrink:0;background:#fafafa;border-bottom:1px solid #f3f4f6;letter-spacing:.5px}
+.cal-header .sun{color:#f87171}
+.cal-header .sat{color:#60a5fa}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);grid-auto-rows:1fr;gap:0;flex:1;border-top:1px solid #f3f4f6}
+.cal-cell{background:#fff;padding:3px 3px 2px;cursor:pointer;position:relative;overflow:hidden;min-height:0;display:flex;flex-direction:column;border-right:1px solid #f3f4f6;border-bottom:1px solid #f3f4f6;transition:background .1s}
+.cal-cell:nth-child(7n){border-right:none}
+.cal-cell:hover{background:#fafbff}
+.cal-cell.today{background:#eff6ff}
+.cal-cell.today .cal-day-num{background:#4f46e5;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px}
+.cal-cell.other-month{background:#fafafa}
+.cal-cell.other-month .cal-day{color:#d1d5db}
+.cal-cell.other-month .cal-day-num{color:#d1d5db;font-weight:400}
 .cal-cell.other-month .ev-bar{display:none}
 .cal-cell.other-month .ev-placeholder{display:none}
-.cal-cell.other-month .hol-name{opacity:.3}
-.cal-cell.other-month.holiday{background:#fefefe}
-.cal-day{font-size:11px;font-weight:700;padding:1px 3px;color:#334155;flex-shrink:0;display:flex;align-items:center;gap:2px}
-.cal-cell.sun .cal-day{color:#ef4444}
-.cal-cell.sat .cal-day{color:#3b82f6}
-.cal-cell.holiday{background:#fff5f5}
-.cal-cell.holiday .cal-day{color:#ef4444}
-.hol-name{font-size:8px;color:#ef4444;font-weight:600;margin-left:2px}
+.cal-cell.other-month .hol-name{display:none}
+.cal-cell.other-month .nol-name{display:none}
+.cal-cell.other-month.holiday{background:#fafafa}
+.cal-day{font-size:11px;font-weight:700;padding:1px 2px;color:#374151;flex-shrink:0;display:flex;align-items:center;gap:3px;line-height:1}
+.cal-day-num{font-size:11px;font-weight:700;min-width:20px;height:20px;display:flex;align-items:center;justify-content:center}
+.cal-cell.sun .cal-day,.cal-cell.sun .cal-day-num{color:#ef4444}
+.cal-cell.sat .cal-day,.cal-cell.sat .cal-day-num{color:#3b82f6}
+.cal-cell.holiday{background:#fff8f8}
+.cal-cell.holiday .cal-day-num{color:#ef4444}
+.hol-name{font-size:8px;color:#f87171;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 24px)}
 .cal-cell.nolgeum{background:#f0fdf4}
-.cal-cell.nolgeum .cal-day{color:#16a34a}
-.nol-name{font-size:8px;color:#16a34a;font-weight:600;margin-left:2px}
-.cal-day .mascot-dots{display:none}
-.cal-events{flex:1;display:flex;flex-direction:column;gap:1px;min-height:0;overflow:hidden}
+.cal-cell.nolgeum .cal-day-num{color:#16a34a}
+.nol-name{font-size:8px;color:#16a34a;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 24px)}
+.cal-events{flex:1;display:flex;flex-direction:column;gap:1px;min-height:0;overflow:hidden;margin-top:1px}
 
 /* Event bars */
-.ev-bar{font-size:10px;padding:2px 5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;line-height:1.4;height:20px;flex-shrink:0;display:flex;align-items:center;gap:3px}
-.ev-bar .ev-badge{display:inline-flex;align-items:center;gap:2px;background:rgba(255,255,255,.25);padding:0 5px;border-radius:10px;font-size:9px;height:16px;flex-shrink:0}
-.ev-bar.start{border-radius:3px 0 0 3px}
-.ev-bar.end{border-radius:0 3px 3px 0}
-.ev-bar.single{border-radius:3px}
+.ev-bar{font-size:10px;padding:2px 6px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700;line-height:1.4;height:20px;flex-shrink:0;display:flex;align-items:center;gap:3px;opacity:.95}
+.ev-bar .ev-badge{display:inline-flex;align-items:center;gap:1px;background:rgba(255,255,255,.28);padding:0 4px;border-radius:8px;font-size:10px;height:16px;flex-shrink:0}
+.ev-bar.start{border-radius:4px 0 0 4px;margin-left:2px}
+.ev-bar.end{border-radius:0 4px 4px 0;margin-right:2px}
+.ev-bar.single{border-radius:4px;margin:0 2px}
 .ev-bar.mid{border-radius:0}
-.ev-bar.start.end{border-radius:3px}
+.ev-bar.start.end{border-radius:4px;margin:0 2px}
 .ev-placeholder{height:20px;flex-shrink:0}
 
 /* Modals */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:50;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
 .modal-overlay.open{display:flex}
-.modal{background:#fff;border-radius:16px;padding:24px;width:400px;max-width:92vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
-.modal h2{font-size:16px;margin-bottom:16px;color:#1e293b}
-.modal label{font-size:12px;font-weight:600;color:#64748b;display:block;margin-bottom:4px;margin-top:12px}
-.modal input,.modal select,.modal textarea{width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;font-family:inherit}
-.modal input:focus,.modal textarea:focus,.modal select:focus{outline:none;border-color:#6366f1}
-.modal textarea{height:60px;resize:none}
+.modal{background:#fff;border-radius:18px;padding:26px;width:400px;max-width:92vw;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18)}
+.modal h2{font-size:17px;font-weight:800;margin-bottom:16px;color:#111827}
+.modal label{font-size:12px;font-weight:600;color:#6b7280;display:block;margin-bottom:4px;margin-top:14px}
+.modal input,.modal select,.modal textarea{width:100%;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:14px;font-family:inherit;transition:border-color .12s}
+.modal input:focus,.modal textarea:focus,.modal select:focus{outline:none;border-color:#4f46e5}
+.modal textarea{height:64px;resize:none}
 .date-row{display:flex;gap:8px;align-items:center}
 .date-row input{flex:1}
-.date-row span{color:#94a3b8;font-size:13px;flex-shrink:0}
+.date-row span{color:#9ca3af;font-size:13px;flex-shrink:0}
 .modal .btns{display:flex;gap:8px;margin-top:20px}
-.modal .btns button{flex:1;padding:11px;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s}
-.modal .btn-save{background:#6366f1;color:#fff}
-.modal .btn-save:hover{background:#4f46e5}
-.modal .btn-cancel{background:#f1f5f9;color:#64748b}
+.modal .btns button{flex:1;padding:12px;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .12s}
+.modal .btn-save{background:#4f46e5;color:#fff}
+.modal .btn-save:hover{background:#4338ca}
+.modal .btn-cancel{background:#f3f4f6;color:#6b7280}
 .modal .btn-delete{background:#fef2f2;color:#ef4444}
 .modal .btns button:active{opacity:.8}
 .user-mascot-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:8px;font-size:13px;font-weight:600;color:#fff;margin-top:8px}
 
 /* Registration modal */
 .reg-mascot-grid{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap}
-.reg-mascot-btn{width:56px;height:56px;border-radius:14px;border:2px solid #e2e8f0;background:#fff;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.reg-mascot-btn:hover:not(:disabled){transform:scale(1.1)}
-.reg-mascot-btn.selected{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.25)}
+.reg-mascot-btn{width:60px;height:60px;border-radius:14px;border:2px solid #e5e7eb;background:#fff;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.reg-mascot-btn:hover:not(:disabled){transform:scale(1.08);border-color:#c7d2fe}
+.reg-mascot-btn.selected{border-color:#4f46e5;box-shadow:0 0 0 3px rgba(79,70,229,.2);background:#eff0fe}
 .reg-mascot-btn:disabled{opacity:.3;cursor:not-allowed}
 
 /* Day detail */
-.day-detail{background:#fff;border-radius:16px;padding:20px;width:400px;max-width:92vw;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
-.day-detail h2{font-size:16px;margin-bottom:12px;color:#1e293b;display:flex;justify-content:space-between;align-items:center}
-.day-detail .add-btn-sm{background:#6366f1;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer}
-.day-event{display:flex;align-items:flex-start;gap:10px;padding:10px;border-radius:10px;cursor:pointer;transition:background .1s}
+.day-detail{background:#fff;border-radius:18px;padding:22px;width:400px;max-width:92vw;max-height:80vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18)}
+.day-detail h2{font-size:16px;font-weight:800;margin-bottom:14px;color:#111827;display:flex;justify-content:space-between;align-items:center}
+.day-detail .add-btn-sm{background:#4f46e5;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer}
+.day-event{display:flex;align-items:flex-start;gap:10px;padding:10px 8px;border-radius:10px;cursor:pointer;transition:background .1s}
 .day-event:hover{background:#f8fafc}
 .day-event:active{background:#f1f5f9}
-.day-event-mascot{font-size:20px;flex-shrink:0;margin-top:2px}
+.day-event-mascot{font-size:22px;flex-shrink:0;margin-top:1px}
 .day-event-info{flex:1;min-width:0}
-.day-event-title{font-size:14px;font-weight:600;color:#1e293b}
-.day-event-meta{font-size:11px;color:#94a3b8;margin-top:2px}
-.day-event-memo{font-size:12px;color:#64748b;margin-top:3px;white-space:pre-wrap}
-.day-event-none{text-align:center;padding:24px;color:#94a3b8;font-size:13px}
+.day-event-title{font-size:14px;font-weight:700;color:#111827}
+.day-event-meta{font-size:11px;color:#9ca3af;margin-top:2px}
+.day-event-memo{font-size:12px;color:#6b7280;margin-top:3px;white-space:pre-wrap}
+.day-event-none{text-align:center;padding:28px;color:#9ca3af;font-size:13px}
 
 /* Admin panel */
-.admin-panel{background:#fff;border-radius:16px;padding:24px;width:500px;max-width:92vw;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
-.admin-panel h2{font-size:16px;margin-bottom:16px;color:#1e293b}
-.admin-member{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;border:1px solid #e2e8f0;margin-bottom:8px}
+.admin-panel{background:#fff;border-radius:18px;padding:24px;width:500px;max-width:92vw;max-height:85vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18)}
+.admin-panel h2{font-size:17px;font-weight:800;margin-bottom:16px;color:#111827}
+.admin-member{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;border:1px solid #e5e7eb;margin-bottom:8px;background:#fafafa}
 .admin-member .mascot-icon{font-size:24px}
 .admin-member .member-info{flex:1;min-width:0}
-.admin-member .member-name{font-size:14px;font-weight:600;color:#1e293b}
-.admin-member .member-email{font-size:11px;color:#94a3b8}
-.admin-member select{padding:4px 8px;border:1px solid #e2e8f0;border-radius:6px;font-size:12px}
-.admin-member .btn-remove{background:#fef2f2;color:#ef4444;border:none;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer}
+.admin-member .member-name{font-size:14px;font-weight:700;color:#111827}
+.admin-member .member-email{font-size:11px;color:#9ca3af}
+.admin-member select{padding:4px 8px;border:1px solid #e5e7eb;border-radius:6px;font-size:12px;background:#fff}
+.admin-member .btn-remove{background:#fef2f2;color:#ef4444;border:none;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer}
 .admin-member .btn-remove:hover{background:#fee2e2}
 
 /* Loading */
-.loading-spinner{display:inline-block;width:20px;height:20px;border:2px solid #e2e8f0;border-top-color:#6366f1;border-radius:50%;animation:spin .6s linear infinite}
+.loading-spinner{display:inline-block;width:22px;height:22px;border:2.5px solid #e5e7eb;border-top-color:#4f46e5;border-radius:50%;animation:spin .6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.7);z-index:100;display:none;align-items:center;justify-content:center}
+.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.75);z-index:100;display:none;align-items:center;justify-content:center}
 .loading-overlay.active{display:flex}
 
 @media(max-width:700px){
-  .cal-container{flex-direction:column;overflow-y:auto}
+  .cal-container{flex-direction:column;overflow-y:auto;padding:10px 12px}
   .cal-month{min-width:auto;flex:none}
-  .cal-cell{min-height:48px}
-  .topbar{padding:8px 12px}
+  .cal-cell{min-height:50px}
+  .topbar{padding:0 12px}
   .topbar h1{font-size:14px}
-  .ev-bar{font-size:7px;height:12px}
-  .ev-placeholder{height:12px}
+  .ev-bar{font-size:7px;height:14px}
+  .ev-placeholder{height:14px}
 }
 </style>
 </head>
 <body>
 
 <div class="login-screen" id="login-screen">
-  <h1>해외서비스팀 캘린더</h1>
+  <h1>해외사업팀 캘린더</h1>
   <p>Google 계정으로 로그인하세요</p>
   <div id="g_id_onload"
     data-client_id="272234568921-8m6a55tgvo7e86nsk2u7tjbarqff34en.apps.googleusercontent.com"
@@ -167,7 +168,7 @@ body{background:#f8fafc;min-height:100vh;font-family:-apple-system,'Pretendard',
 <div id="app">
   <div class="topbar">
     <div class="topbar-left">
-      <h1>해외서비스팀 캘린더</h1>
+      <h1>해외사업팀 캘린더</h1>
       <div class="member-legend" id="member-legend"></div>
     </div>
     <div class="topbar-right">
@@ -184,7 +185,7 @@ body{background:#f8fafc;min-height:100vh;font-family:-apple-system,'Pretendard',
 <div class="modal-overlay" id="reg-overlay">
   <div class="modal">
     <h2>첫 방문 등록</h2>
-    <p style="font-size:13px;color:#64748b;margin-bottom:8px">해외서비스팀 캘린더에 오신 것을 환영합니다! 이름과 마스코트를 선택해주세요.</p>
+    <p style="font-size:13px;color:#64748b;margin-bottom:8px">해외사업팀 캘린더에 오신 것을 환영합니다! 이름과 마스코트를 선택해주세요.</p>
     <label>이름 (닉네임)</label>
     <input type="text" id="reg-name" placeholder="예: 홍길동" maxlength="20">
     <label>마스코트 선택</label>
@@ -585,7 +586,7 @@ function renderMonth(year,month){
       html+=`<div class="${classes.join(' ')}" onclick="openDay('${cell.date}')" data-date="${cell.date}">`;
       const holName=hol?`<span class="hol-name">${hol}</span>`:'';
       const nolName=nolgeum?`<span class="nol-name">놀금</span>`:'';
-      html+=`<div class="cal-day"><span>${cell.day}</span>${holName}${nolName}${mascotsHtml}</div>`;
+      html+=`<div class="cal-day"><span class="cal-day-num">${cell.day}</span>${holName}${nolName}</div>`;
       html+=`<div class="cal-events">`;
 
       // Render lane bars for this column
