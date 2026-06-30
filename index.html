@@ -266,12 +266,36 @@ window.addEventListener('load',()=>{
   if(email) initApp(email);
 });
 
+const CACHE_KEY='cal_cache_v1';
+function saveCache(m,e){try{localStorage.setItem(CACHE_KEY,JSON.stringify({members:m,events:e,ts:Date.now()}));}catch(ex){}}
+function loadCache(){try{const c=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');return c&&(Date.now()-c.ts<3600000)?c:null;}catch(e){return null;}}
+
 async function initApp(email){
+  // 캐시 있으면 즉시 표시
+  const cache=loadCache();
+  if(cache){
+    members=cache.members||[];
+    events=cache.events||[];
+    const me=members.find(m=>m.email===email);
+    if(me&&me.status==='approved'){
+      currentUser=me;
+      enterCalendarFast();
+      // 백그라운드에서 최신 데이터로 갱신
+      Promise.all([api('member_list'),api('cal_list')]).then(([mr,er])=>{
+        members=mr.members||mr.data||[];
+        events=er.events||er.data||[];
+        saveCache(members,events);
+        renderMemberLegend();renderCalendars();
+      }).catch(()=>{});
+      return;
+    }
+  }
   showLoading();
   try{
     const [memberRes, eventRes] = await Promise.all([api('member_list'), api('cal_list')]);
     members=memberRes.members||memberRes.data||[];
     events=eventRes.events||eventRes.data||[];
+    saveCache(members,events);
     const me=members.find(m=>m.email===email);
     if(me){
       if(me.status==='pending'){
