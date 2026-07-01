@@ -373,9 +373,17 @@ async function submitRegistration(){
 }
 
 // --- Enter Calendar ---
+var _teamFilterOn=false;
+function toggleTeamFilter(chip){
+  _teamFilterOn=!_teamFilterOn;
+  chip.style.outline=_teamFilterOn?'2px solid #111827':'';
+  chip.style.outlineOffset='1px';
+  renderCalendars();
+}
+
 function renderMemberLegend(){
   const el=document.getElementById('member-legend');
-  el.innerHTML='<span class="member-chip" style="background:#6366f1">🗓 팀일정</span>'
+  el.innerHTML='<span class="member-chip" style="background:#9ca3af;cursor:pointer" onclick="toggleTeamFilter(this)">🗓 팀일정</span>'
     +members.map(m=>{
     const isMe=currentUser&&m.email===currentUser.email;
     return `<span class="member-chip${isMe?' me':''}" style="background:${m.color}">${m.mascot} ${m.name}</span>`;
@@ -502,7 +510,9 @@ function getEventsForDateRange(startDate,endDate){
   return events.filter(ev=>{
     const evStart=ev.date;
     const evEnd=ev.endDate||ev.date;
-    return evStart<=endDate && evEnd>=startDate;
+    if(evStart>endDate||evEnd<startDate) return false;
+    if(_teamFilterOn) return ev.author==='team';
+    return true;
   });
 }
 
@@ -696,10 +706,15 @@ function openEventModal(dateStr,eventId){
   const mascotBadge=mem?`<div class="user-mascot-badge" style="background:${mem.color}">${mem.mascot} ${mem.name}</div>`:'';
   const canDelete=_editingEvent&&(isAdmin()||(_editingEvent.author===currentUser.email));
 
+  const isTeamEv=_editingEvent&&_editingEvent.author==='team';
   const modal=document.getElementById('event-modal');
   modal.innerHTML=`
     <h2>${_editingEvent?'일정 수정':'일정 추가'}</h2>
     ${mascotBadge}
+    <label style="margin-top:10px;display:flex;align-items:center;gap:6px;cursor:pointer">
+      <input type="checkbox" id="ev-team" ${isTeamEv?'checked':''} style="width:15px;height:15px;accent-color:#6366f1;flex-shrink:0">
+      <span style="font-size:12px;font-weight:700;color:#6366f1">🗓 팀일정으로 등록</span>
+    </label>
     <label>제목</label>
     <input type="text" id="ev-title" value="${ev.title||''}" placeholder="일정 제목" maxlength="50">
     <label>날짜</label>
@@ -729,19 +744,22 @@ async function saveEvent(){
   const memo=document.getElementById('ev-memo').value.trim();
   if(!title){alert('제목을 입력해주세요.');return}
   if(!date){alert('날짜를 선택해주세요.');return}
+  const isTeam=document.getElementById('ev-team').checked;
+  const evColor=isTeam?'#6366f1':currentUser.color;
+  const evAuthor=isTeam?'team':currentUser.email;
   const params={
     title:enc(title),
     date,
     endDate:endDate||date,
     time:time||'',
     memo:enc(memo),
-    color:currentUser.color,
-    author:currentUser.email
+    color:evColor,
+    author:evAuthor
   };
   const id=_editingEvent?_editingEvent.id:('ev_'+Date.now()+'_'+Math.random().toString(36).slice(2,6));
   params.id=id;
   // optimistic update
-  const localEv={id,date,endDate:endDate||date,time:time||'',title,memo,color:currentUser.color,author:currentUser.email};
+  const localEv={id,date,endDate:endDate||date,time:time||'',title,memo,color:evColor,author:evAuthor};
   if(_editingEvent){events=events.filter(e=>e.id!==id);}
   events.push(localEv);
   closeEvent();
