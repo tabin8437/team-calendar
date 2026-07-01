@@ -375,7 +375,8 @@ async function submitRegistration(){
 // --- Enter Calendar ---
 function renderMemberLegend(){
   const el=document.getElementById('member-legend');
-  el.innerHTML=members.map(m=>{
+  el.innerHTML='<span class="member-chip" style="background:#6366f1">🗓 팀일정</span>'
+    +members.map(m=>{
     const isMe=currentUser&&m.email===currentUser.email;
     return `<span class="member-chip${isMe?' me':''}" style="background:${m.color}">${m.mascot} ${m.name}</span>`;
   }).join('');
