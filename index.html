@@ -639,9 +639,10 @@ function renderMonth(year,month){
         const seg=lanes[l]&&lanes[l].find(s=>col>=s.startCol&&col<=s.endCol);
         if(seg){
           const ev=seg.event;
+          const isTeamEv=ev.author==='team';
           const mem=getMemberByEmail(ev.author);
-          const color=mem?mem.color:(ev.color||'#6366f1');
-          const mascotE=mem?mem.mascot:'';
+          const color=isTeamEv?'#9ca3af':(mem?mem.color:(ev.color||'#9ca3af'));
+          const mascotE=isTeamEv?'🗓':(mem?mem.mascot:'');
           const isStart=col===seg.startCol;
           const isEnd=col===seg.endCol;
           const isSingle=isStart&&isEnd&&ev.date===(ev.endDate||ev.date);
@@ -652,7 +653,7 @@ function renderMonth(year,month){
             if(isEnd) cls+=' end';
             if(!isStart&&!isEnd) cls+=' mid';
           }
-          const memName=mem?mem.name:'';
+          const memName=isTeamEv?'팀일정':(mem?mem.name:'');
           const label=isStart||isSingle?`<span class="ev-badge">${mascotE} ${esc(memName)}</span>${esc(ev.title||'')}`:'';
           html+=`<div class="${cls}" style="background:${color}" title="${memName}: ${ev.title||''}">${label}</div>`;
         } else {
