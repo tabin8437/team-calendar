@@ -689,7 +689,8 @@ function openDay(dateStr){
       html+=`<div class="day-event-mascot">${mascot}</div>`;
       html+=`<div class="day-event-info">`;
       html+=`<div class="day-event-title">${ev.title||'(제목 없음)'}</div>`;
-      html+=`<div class="day-event-meta">${ev.time?ev.time+' ・ ':''}${authorName}${ev.endDate&&ev.endDate!==ev.date?' ・ '+ev.date+' ~ '+ev.endDate:''}</div>`;
+      const timeStr=ev.time?(function(t){if(!t)return '';if(typeof t==='string')return t.slice(0,5);const d=new Date(t);return isNaN(d)?t:(String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'));})(ev.time):'';
+      html+=`<div class="day-event-meta">${timeStr?timeStr+' ・ ':''}${authorName}${ev.endDate&&ev.endDate!==ev.date?' ・ '+ev.date+' ~ '+ev.endDate:''}</div>`;
       if(ev.memo) html+=`<div class="day-event-memo">${ev.memo}</div>`;
       html+=`</div></div>`;
     }
