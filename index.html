@@ -374,20 +374,26 @@ async function submitRegistration(){
 
 // --- Enter Calendar ---
 var _teamFilterOn=false;
-function toggleTeamFilter(chip){
+function toggleTeamFilter(){
   _teamFilterOn=!_teamFilterOn;
+  updateTeamChip();
+  renderCalendars();
+}
+function updateTeamChip(){
+  const chip=document.getElementById('team-chip');
+  if(!chip) return;
   chip.style.outline=_teamFilterOn?'2px solid #111827':'';
   chip.style.outlineOffset='1px';
-  renderCalendars();
 }
 
 function renderMemberLegend(){
   const el=document.getElementById('member-legend');
-  el.innerHTML='<span class="member-chip" style="background:#9ca3af;cursor:pointer" onclick="toggleTeamFilter(this)">🗓 팀일정</span>'
+  el.innerHTML='<span class="member-chip" id="team-chip" style="background:#9ca3af;cursor:pointer" onclick="toggleTeamFilter()">🗓 팀일정</span>'
     +members.map(m=>{
     const isMe=currentUser&&m.email===currentUser.email;
     return `<span class="member-chip${isMe?' me':''}" style="background:${m.color}">${m.mascot} ${m.name}</span>`;
   }).join('');
+  updateTeamChip();
 }
 
 function enterCalendarFast(){
@@ -745,7 +751,7 @@ async function saveEvent(){
   if(!title){alert('제목을 입력해주세요.');return}
   if(!date){alert('날짜를 선택해주세요.');return}
   const isTeam=document.getElementById('ev-team').checked;
-  const evColor=isTeam?'#6366f1':currentUser.color;
+  const evColor=isTeam?'#9ca3af':currentUser.color;
   const evAuthor=isTeam?'team':currentUser.email;
   const params={
     title:enc(title),
