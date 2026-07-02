@@ -654,8 +654,8 @@ function renderMonth(year,month){
             if(!isStart&&!isEnd) cls+=' mid';
           }
           const memName=isTeamEv?'팀일정':(mem?mem.name:'');
-          const label=`<span class="ev-badge">${mascotE} ${esc(memName)}</span>${esc(ev.title||'')}`;
-          html+=`<div class="${cls}" style="background:${color}" title="${memName}: ${ev.title||''}">${label}</div>`;
+          const badgeHtml=`<span class="ev-badge">${mascotE} ${memName}</span>`;
+          html+=`<div class="${cls}" style="background:${color}" title="${memName}: ${ev.title||''}">${badgeHtml}${ev.title||''}</div>`;
         } else {
           html+=`<div class="ev-placeholder"></div>`;
         }
