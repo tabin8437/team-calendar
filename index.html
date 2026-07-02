@@ -642,7 +642,7 @@ function renderMonth(year,month){
           const isTeamEv=ev.author==='team';
           const mem=getMemberByEmail(ev.author);
           const color=isTeamEv?'#9ca3af':(mem?mem.color:(ev.color||'#9ca3af'));
-          const mascotE=isTeamEv?'🗓':(mem?mem.mascot:'');
+          const mascotE=isTeamEv?'📅':(mem?mem.mascot:'');
           const isStart=col===seg.startCol;
           const isEnd=col===seg.endCol;
           const isSingle=isStart&&isEnd&&ev.date===(ev.endDate||ev.date);
@@ -688,7 +688,17 @@ function openDay(dateStr){
       html+=`<div class="day-event-mascot">${mascot}</div>`;
       html+=`<div class="day-event-info">`;
       html+=`<div class="day-event-title">${ev.title||'(제목 없음)'}</div>`;
-      const timeStr=ev.time?(function(t){if(!t)return '';if(typeof t==='string')return t.slice(0,5);const d=new Date(t);return isNaN(d)?t:(String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'));})(ev.time):'';
+      const timeStr=ev.time?(function(t){
+        if(!t)return '';
+        if(typeof t==='string'){
+          // HH:MM 형식이면 그대로
+          if(/^\d{2}:\d{2}/.test(t))return t.slice(0,5);
+          // ISO string (1899-12-30T03:30:00.000Z) 또는 Date.toString() 형태
+          const d=new Date(t);
+          if(!isNaN(d))return String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');
+        }
+        return '';
+      })(ev.time):'';
       html+=`<div class="day-event-meta">${timeStr?timeStr+' ・ ':''}${authorName}${ev.endDate&&ev.endDate!==ev.date?' ・ '+ev.date+' ~ '+ev.endDate:''}</div>`;
       if(ev.memo) html+=`<div class="day-event-memo">${ev.memo}</div>`;
       html+=`</div></div>`;
