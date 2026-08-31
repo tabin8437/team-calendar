@@ -1,7 +1,7 @@
 {
-  "name": "해외사업팀 캘린더",
+  "name": "해외사업실 캘린더",
   "short_name": "팀캘린더",
-  "description": "해외사업팀 일정 공유 캘린더",
+  "description": "해외사업실 일정 공유 캘린더",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
