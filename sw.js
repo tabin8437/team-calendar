@@ -1,4 +1,4 @@
-var CACHE_NAME = 'team-calendar-v3';
+var CACHE_NAME = 'team-calendar-v4';
 var ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', function(e) {
