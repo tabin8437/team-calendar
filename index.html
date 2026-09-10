@@ -38,8 +38,8 @@ body{background:#f0f2f7;min-height:100vh;font-family:-apple-system,'Pretendard',
 .btn-today:hover{background:#4338ca}
 .btn-admin{background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;width:32px;height:32px;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s}
 .btn-admin:hover{background:#f3f4f6}
-.btn-shiftee{background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;width:32px;height:32px;font-size:15px;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .12s}
-.btn-shiftee:hover{background:#f3f4f6;border-color:#d1d5db}
+.btn-shiftee{background:#6366f1;border:none;border-radius:8px;height:32px;padding:0 12px;font-size:12px;font-weight:700;color:#fff;display:flex;align-items:center;text-decoration:none;letter-spacing:.2px;transition:background .12s;white-space:nowrap}
+.btn-shiftee:hover{background:#4f46e5}
 
 /* Calendar container */
 .cal-container{display:flex;gap:14px;padding:14px 18px 14px;flex:1;overflow:hidden}
@@ -181,7 +181,7 @@ body{background:#f0f2f7;min-height:100vh;font-family:-apple-system,'Pretendard',
       <button class="nav-btn" onclick="navMonth(-1)">◀</button>
       <button class="btn-today" onclick="goToday()">오늘</button>
       <button class="nav-btn" onclick="navMonth(1)">▶</button>
-      <a class="btn-shiftee" href="https://shiftee.io/app/companies/441755/staff/scheduler#month" target="_blank" title="시프티">🗓️</a>
+      <a class="btn-shiftee" href="https://shiftee.io/app/companies/441755/staff/scheduler#month" target="_blank">시프티</a>
       <button class="btn-admin" id="btn-admin" style="display:none" onclick="openAdmin()">⚙️</button>
     </div>
   </div>
