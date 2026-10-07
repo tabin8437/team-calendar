@@ -290,15 +290,19 @@ function onGoogleLogin(response){
 
 window.addEventListener('load',()=>{
   const email=sessionStorage.getItem('g_email');
-  if(email) initApp(email);
+  if(email){
+    // 이미 로그인된 경우 로그인 화면 바로 숨김
+    document.getElementById('login-screen').style.display='none';
+    initApp(email);
+  }
 });
 
 const CACHE_KEY='cal_cache_v1';
 function saveCache(m,e){try{localStorage.setItem(CACHE_KEY,JSON.stringify({members:m,events:e,ts:Date.now()}));}catch(ex){}}
-function loadCache(){try{const c=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');return c&&(Date.now()-c.ts<3600000)?c:null;}catch(e){return null;}}
+// TTL 제거: 캐시는 항상 즉시 사용, 백그라운드에서 최신으로 갱신
+function loadCache(){try{return JSON.parse(localStorage.getItem(CACHE_KEY)||'null');}catch(e){return null;}}
 
 async function initApp(email){
-  // 캐시 있으면 즉시 표시
   const cache=loadCache();
   if(cache){
     members=cache.members||[];
@@ -307,7 +311,7 @@ async function initApp(email){
     if(me&&me.status==='approved'){
       currentUser=me;
       enterCalendarFast();
-      // 백그라운드에서 최신 데이터로 갱신
+      // 항상 백그라운드에서 최신 데이터 갱신
       Promise.all([api('member_list'),api('cal_list')]).then(([mr,er])=>{
         members=mr.members||mr.data||[];
         events=er.events||er.data||[];
@@ -343,6 +347,7 @@ async function initApp(email){
     }
   }catch(e){
     hideLoading();
+    document.getElementById('login-screen').style.display='flex';
     document.getElementById('login-error').textContent='서버 연결 실패: '+e.message;
   }
 }
